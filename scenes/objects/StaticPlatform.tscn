@@ -1,12 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbcm6iq7rg08y"]
+[gd_scene load_steps=3 format=3 uid="uid://ccj0myyhrwsf1"]
 
-[ext_resource type="Script" path="res://scripts/Environment/StaticPlatform.cs" id="1_d3bpn"]
+[ext_resource type="Script" uid="uid://bwfun2sax6o0g" path="res://scripts/Environment/StaticPlatform.cs" id="1_d3bpn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0rj6d"]
-size = Vector2(320, 32)
+size = Vector2(448, 32)
 
 [node name="StaticPlatform" type="StaticBody2D"]
 script = ExtResource("1_d3bpn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_0rj6d")
