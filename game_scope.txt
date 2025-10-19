@@ -1,0 +1,62 @@
+# Titre : Detymora
+
+Jeu physique de **“Chain Reactions”** (2D, vue de côté).
+
+# Pitch
+
+Un jeu de physique 2D où tu orchestres des réactions en chaîne dans une pièce d'appartement pleine d'objets. Tu places plusieurs balles aux propriétés distinctes, règles précisément direction et force, puis tu observes — et ajustes — jusqu'à déclencher des interactions spectaculaires mais exactes, sans approximation.
+
+# État initial & principe de contrôle
+
+* La scène s'ouvre sur **une pièce fixe, en pause** (le temps n'avance pas).
+* Le joueur **ne manipule pas directement les objets** de la pièce.
+* Il dispose de par exemple **3 balles** (couleurs/propriétés différentes : masse, dureté, friction/lissé).
+* Pour chaque balle : **placement libre**, puis choix d'un **vecteur** (direction + intensité de la force/impulsion).
+* Quand il lance la simulation, **toute la scène s'anime selon une physique réaliste**, dont la gravité.
+
+# Cœur du gameplay
+
+* **Simulation complète** (pas d'estimation) : la trajectoire calculée est **exactement** celle qui se produira au lancement.
+* Après que le joueur a terminé une action de placement ou d'ajustement de force, le jeu exécute **une pré-simulation invisible accélérée** et affiche dans la scène visible :
+  * **La trajectoire complète** de chaque objet sous forme de **trace colorée** (une couleur par objet) correspondant à l'enregistrement des positions successives de l'objet pendant la simulation.
+  * Des **“ghosts”** (sprites translucides) indiquant la **position finale** de chaque objet.
+* Le joueur peut ainsi librement ajuster toutes les conditions de départ et visualiser en temps réel les conséquences futures et l'état final.
+* Il peut aussi ajuster librement un curseur de temps pour revenir en arrière et afficher la position de chaque objet à ce moment précis, les ghosts représentant la position de chaque objet à cet instant.
+* La simulation doit s'arrêter lorsque tous les objets sont immobiles pendant 5s ou après un durée maximum de 30s.
+
+
+# Monde & interactions physiques
+
+* La pièce contient des objets variés :
+
+  * **Objets lourds/massifs** : ils ne sont pas déplacés par les balles, mais provoquent des **rebonds**.
+  * **Objets plus légers** : ils peuvent **glisser, tomber, se bousculer**, être **poussés** par les impacts, etc.
+* Les balles peuvent **rebondir plusieurs fois**, **s'entrechoquer** et **entraîner des cascades** d'événements.
+
+#Placement des balles.
+ * La joueur dispose d'un inventaire d'objet, par exemples avec les trois balles.
+ * Les balles peuvent être placés par le joueur seulement dans certaines zones autorisées.
+ * Le joueur sélectionne un balle en cliquant dessus avec le bouton gauche de la souris et la déplace à l'endroit voulu en cliquant une nouvelle fois.
+ * au moment où il pose la balle, il peut laisser le bouton gauche enfoncé, ce qui déplace un vecteur à partir de la balle, le joueur choisit ainsi la direction du vecteur et la force qui est proportionnelle à la longueur.
+
+# Objectifs & progression
+
+* Chaque niveau propose **des objectifs visuels** (ex. : *balle bleue* dans la **corbeille**, *balle jaune* sur le **cendrier**, *balle verte* dans le **bocal du poisson**).
+* Les objectifs sont **matérialisés par des “ghosts cibles”** (silhouettes des balles aux positions attendues).
+* Quand **tous les objectifs** sont atteints, càd que les balles restent dans la bonne position pendant au moins 5s, le niveau est **validé** et le **suivant se débloque**.
+* Le joueur peut **rejouer** un niveau pour optimiser ses solutions ou chercher des trajectoires plus élégantes.
+
+# Boucle de jeu (résumé)
+
+1. Observer la pièce (en pause).
+2. Placer chaque balle et définir son vecteur.
+3. Afficher la **prévisualisation exacte** (trajectoires + ghosts finaux affichés) dés que le joueur à modifié les conditions de départ.
+4. Le joueur peut ajuster finement si nécessaire (placement/force), chaque changement redéclenche la simulation.
+5. **Jouer** la scène complète et savourer la réaction en chaîne.
+6. Réussite ⇒ niveau suivant ; sinon ⇒ itérer.
+
+# Intention & sensations
+
+* **Précision** et **ingénierie ludique** : le plaisir vient de construire des solutions improbables mais **physiquement cohérentes**.
+* **Lisibilité** : les traces de trajectoire et les ghosts rendent **compréhensible** une simulation potentiellement très complexe.
+* **Créativité** : multiples chemins mènent aux objectifs, encourageant l'expérimentation.
