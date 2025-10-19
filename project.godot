@@ -13,7 +13,21 @@ config_version=5
 config/name="Detymora"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+run/main_scene="res://scenes/main/MainScene.tscn"
 
 [dotnet]
 
 project/assembly_name="Detymora"
+project/enabled=true
+project/project_path="res://Detymora.csproj"
+
+[input]
+
+reset_simulation={
+"deadzone": 0.5,
+"events": [{
+"type": "key",
+"keycode": 82,
+"physical_keycode": 82
+}]
+}

@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbcm6iq7rg08y"]
+
+[ext_resource type="Script" path="res://scripts/Environment/StaticPlatform.cs" id="1_d3bpn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0rj6d"]
+size = Vector2(320, 32)
+
+[node name="StaticPlatform" type="StaticBody2D"]
+script = ExtResource("1_d3bpn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_0rj6d")

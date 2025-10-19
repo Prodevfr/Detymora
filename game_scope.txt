@@ -60,3 +60,25 @@ Un jeu de physique 2D où tu orchestres des réactions en chaîne dans une pièc
 * **Précision** et **ingénierie ludique** : le plaisir vient de construire des solutions improbables mais **physiquement cohérentes**.
 * **Lisibilité** : les traces de trajectoire et les ghosts rendent **compréhensible** une simulation potentiellement très complexe.
 * **Créativité** : multiples chemins mènent aux objectifs, encourageant l'expérimentation.
+
+---
+
+
+Projet Godot 4.5 (.NET C#) sous Ubuntu. Jeu 2D vue de côté “Detymora”. Physique Godot uniquement (pas d’approx). Les trajectoires affichées doivent provenir d’une pré-simulation complète exécutée hors-écran et être strictement identiques à
+l’exécution réelle. La simulation s’arrête quand tous les objets sont immobiles pendant 5 s ou après 30 s. Le joueur place jusqu’à 3 balles dans des zones autorisées, définit un vecteur (direction + intensité proportionnelle à la longueur
+du drag), puis observe trajectoires et “ghosts”. Exigences: déterminisme local (mêmes entrées ⇒ mêmes sorties), pas d’aléatoire non seedé, forces appliquées au tick 0, échantillonnage à chaque tick physique. Penser l’architecture pour un
+SubViewport de pré-simi. Produire du C# fortement typé, classes partielles, dossiers propres.
+
+---
+
+J'ai initalisé un nouveau projet Godot dans le dossier courant.
+Crée les première base du projet, il doit être bien organisé avec des classess propres, tu n'as pas besoin de réaliser toutes les features tout de suite.
+Crée une base saine sur laquelle nous allons pouvoir construire tout le reste.
+Il faut avoir des classe bien définis, utiliser le typage fort de C#.
+Crée d'abord un scène de base avec quelques objets, place les balles à des endroits fixes avec des forces fixes pour l'instant.
+Objectif : avoir une scène de base fonctionnelle, pouvoir cliquer se play et voir toutes les interractions physiques.
+Pas encore d'interactivé à ce stade, juste play, stop, reset.
+
+---
+
+Utilise le MCP context7 pour accéder à la documentation.
