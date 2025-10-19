@@ -1,9 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://2ulvh1qapptc"]
+[gd_scene load_steps=10 format=3 uid="uid://2ulvh1qapptc"]
 
 [ext_resource type="Script" uid="uid://5klqj7oxgb32" path="res://scripts/Core/GameRoot.cs" id="1_tg5s3"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Ball.tscn" id="2_8yq9q"]
 [ext_resource type="PackedScene" uid="uid://ccj0myyhrwsf1" path="res://scenes/objects/StaticPlatform.tscn" id="3_9f4ms"]
 [ext_resource type="PackedScene" path="res://scenes/objects/DynamicCrate.tscn" id="4_q1yfn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_trlxp"]
+friction = 0.6
+bounce = 0.2
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lww0p"]
+friction = 0.6
+bounce = 0.2
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iuide"]
+friction = 0.4
+bounce = 0.8
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hi3im"]
+friction = 0.4
+bounce = 0.6
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vg8n1"]
+friction = 0.4
+bounce = 0.7
 
 [node name="GameRoot" type="Node2D"]
 position = Vector2(593, 291)
@@ -14,7 +34,7 @@ EnvironmentContainerPath = NodePath("Environment")
 [node name="Environment" type="Node2D" parent="."]
 
 [node name="Floor" parent="Environment" instance=ExtResource("3_9f4ms")]
-position = Vector2(15, 269)
+position = Vector2(303, 245)
 Size = Vector2(800, 50)
 Tint = Color(0.24, 0.24, 0.27, 1)
 
@@ -29,12 +49,16 @@ Size = Vector2(220, 18)
 Tint = Color(0.33, 0.33, 0.36, 1)
 
 [node name="LightCrate" parent="Environment" instance=ExtResource("4_q1yfn")]
-position = Vector2(207, -83)
+position = Vector2(231, -91)
+mass = 1.2
+physics_material_override = SubResource("PhysicsMaterial_trlxp")
 Tint = Color(0.73, 0.55, 0.27, 1)
 BodyMass = 1.2
 
 [node name="StackedCrate" parent="Environment" instance=ExtResource("4_q1yfn")]
 position = Vector2(167, -19)
+mass = 2.4
+physics_material_override = SubResource("PhysicsMaterial_lww0p")
 Tint = Color(0.58, 0.42, 0.21, 1)
 BodyMass = 2.4
 
@@ -58,18 +82,23 @@ Tint = Color(0.28, 0.28, 0.32, 1)
 
 [node name="BallRed" parent="BallContainer" instance=ExtResource("2_8yq9q")]
 position = Vector2(-57, -139)
+physics_material_override = SubResource("PhysicsMaterial_iuide")
 Tint = Color(0.9, 0.3, 0.3, 1)
 Bounciness = 0.8
 InitialLinearVelocity = Vector2(180, -210)
 
 [node name="BallGreen" parent="BallContainer" instance=ExtResource("2_8yq9q")]
 position = Vector2(47, -139)
+mass = 1.4
+physics_material_override = SubResource("PhysicsMaterial_hi3im")
 Tint = Color(0.3, 0.8, 0.5, 1)
 BodyMass = 1.4
 InitialLinearVelocity = Vector2(160, -140)
 
 [node name="BallBlue" parent="BallContainer" instance=ExtResource("2_8yq9q")]
 position = Vector2(151, -155)
+mass = 0.8
+physics_material_override = SubResource("PhysicsMaterial_vg8n1")
 Tint = Color(0.3, 0.5, 0.9, 1)
 BodyMass = 0.8
 Bounciness = 0.7

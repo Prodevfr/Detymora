@@ -4,26 +4,112 @@ namespace Detymora.Physics;
 
 #nullable enable
 
+[Tool]
 public partial class Ball : RigidBody2D
 {
-    [ExportSubgroup("Visual")]
-    [Export] public float Radius { get; set; } = 18.0f;
-    [Export] public Color Tint { get; set; } = new(0.8f, 0.2f, 0.2f);
-
-    [ExportSubgroup("Dynamics")]
-    [Export(PropertyHint.Range, "0.1,10,0.1")] public float BodyMass { get; set; } = 1.0f;
-    [Export(PropertyHint.Range, "0,1,0.05")] public float Bounciness { get; set; } = 0.6f;
-    [Export(PropertyHint.Range, "0,1,0.05")] public float Friction { get; set; } = 0.4f;
-    [Export] public Vector2 InitialLinearVelocity { get; set; } = Vector2.Zero;
+    private float _radius = 18.0f;
+    private Color _tint = new(0.8f, 0.2f, 0.2f);
+    private float _bodyMass = 1.0f;
+    private float _bounciness = 0.6f;
+    private float _friction = 0.4f;
+    private Vector2 _initialLinearVelocity = Vector2.Zero;
 
     private bool _initialVelocityApplied;
 
+    [ExportSubgroup("Visual")]
+    [Export]
+    public float Radius
+    {
+        get => _radius;
+        set
+        {
+            if (Mathf.IsEqualApprox(_radius, value))
+            {
+                return;
+            }
+
+            _radius = Mathf.Max(0.5f, value);
+            UpdateGeometry();
+        }
+    }
+
+    [Export]
+    public Color Tint
+    {
+        get => _tint;
+        set
+        {
+            if (_tint == value)
+            {
+                return;
+            }
+
+            _tint = value;
+            QueueRedraw();
+        }
+    }
+
+    [ExportSubgroup("Dynamics")]
+    [Export(PropertyHint.Range, "0.1,10,0.1")]
+    public float BodyMass
+    {
+        get => _bodyMass;
+        set
+        {
+            if (Mathf.IsEqualApprox(_bodyMass, value))
+            {
+                return;
+            }
+
+            _bodyMass = value;
+            UpdatePhysicsProperties();
+        }
+    }
+
+    [Export(PropertyHint.Range, "0,1,0.05")]
+    public float Bounciness
+    {
+        get => _bounciness;
+        set
+        {
+            if (Mathf.IsEqualApprox(_bounciness, value))
+            {
+                return;
+            }
+
+            _bounciness = value;
+            UpdatePhysicsProperties();
+        }
+    }
+
+    [Export(PropertyHint.Range, "0,1,0.05")]
+    public float Friction
+    {
+        get => _friction;
+        set
+        {
+            if (Mathf.IsEqualApprox(_friction, value))
+            {
+                return;
+            }
+
+            _friction = value;
+            UpdatePhysicsProperties();
+        }
+    }
+
+    [Export]
+    public Vector2 InitialLinearVelocity
+    {
+        get => _initialLinearVelocity;
+        set => _initialLinearVelocity = value;
+    }
+
     public override void _Ready()
     {
-        EnsureCollisionShape();
-        ApplyMaterialProperties();
-        UpdateMass();
-        QueueRedraw();
+        UpdateGeometry();
+        UpdatePhysicsProperties();
+        ResetInitialVelocity();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -33,7 +119,7 @@ public partial class Ball : RigidBody2D
             return;
         }
 
-        LinearVelocity = InitialLinearVelocity;
+        LinearVelocity = _initialLinearVelocity;
         _initialVelocityApplied = true;
     }
 
@@ -41,56 +127,77 @@ public partial class Ball : RigidBody2D
     {
         if (!_initialVelocityApplied)
         {
-            state.LinearVelocity = InitialLinearVelocity;
+            state.LinearVelocity = _initialLinearVelocity;
         }
     }
 
     public override void _Draw()
     {
-        DrawCircle(Vector2.Zero, Radius, Tint);
+        DrawCircle(Vector2.Zero, _radius, _tint);
     }
 
     public void InitializeForPlay()
+    {
+        ResetInitialVelocity();
+        QueueRedraw();
+    }
+
+    private void ResetInitialVelocity()
     {
         _initialVelocityApplied = false;
         LinearVelocity = Vector2.Zero;
         AngularVelocity = 0.0f;
         Sleeping = false;
-        QueueRedraw();
     }
 
-    private void EnsureCollisionShape()
+    private void UpdateGeometry()
     {
-        var shapeNode = GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
-        if (shapeNode is null)
+        if (!IsInsideTree())
         {
-            shapeNode = new CollisionShape2D();
-            AddChild(shapeNode);
+            return;
         }
 
-        if (shapeNode.Shape is CircleShape2D circleShape)
+        var collisionShape = GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
+        if (collisionShape is null)
         {
-            circleShape.Radius = Radius;
+            collisionShape = new CollisionShape2D
+            {
+                Name = "CollisionShape2D"
+            };
+            AddChild(collisionShape);
+        }
+
+        if (collisionShape.Shape is CircleShape2D circleShape)
+        {
+            circleShape.Radius = _radius;
         }
         else
         {
-            shapeNode.Shape = new CircleShape2D
+            collisionShape.Shape = new CircleShape2D
             {
-                Radius = Radius
+                Radius = _radius
             };
         }
+
+        QueueRedraw();
     }
 
-    private void ApplyMaterialProperties()
+    private void UpdatePhysicsProperties()
     {
-        var material = PhysicsMaterialOverride as PhysicsMaterial ?? new PhysicsMaterial();
-        material.Bounce = Bounciness;
-        material.Friction = Friction;
-        PhysicsMaterialOverride = material;
-    }
+        if (!IsInsideTree())
+        {
+            return;
+        }
 
-    private void UpdateMass()
-    {
-        Mass = Mathf.Max(0.1f, BodyMass);
+        Mass = Mathf.Max(0.1f, _bodyMass);
+
+        if (PhysicsMaterialOverride is not PhysicsMaterial material)
+        {
+            material = new PhysicsMaterial();
+            PhysicsMaterialOverride = material;
+        }
+
+        material.Bounce = Mathf.Clamp(_bounciness, 0.0f, 1.0f);
+        material.Friction = Mathf.Clamp(_friction, 0.0f, 1.0f);
     }
 }
